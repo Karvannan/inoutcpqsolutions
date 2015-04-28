@@ -16,11 +16,15 @@
 	        init();
 	      });
 	    </script>	
-		<h2>InOut Corporation</h2>
+		<h2><center>InOut Corporation CPQ Solutions</center></h2>		
+		<br/><br/>
+		<button type="button" class="btn btn-default my-button-style" id="createNewOpportunity">New Opportunity</button>
+		<br/><br/>
 		<div id="readAll">
 			<table id="example" cellspacing="0" width="100%">
 			        <thead>
 			            <tr>
+							<th>Action</th>
 			                <th>Id</th>
 			                <th>Name</th>
 			                <th>Amount</th>
