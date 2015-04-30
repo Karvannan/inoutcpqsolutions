@@ -62,12 +62,12 @@ function saveOpportunity() {
 		alert('Amount should be number');
 		return;
 	}
-	var url = "/inoutcpqsolutions/api/opportunity/create";
+	var url = "/inoutcpqsolutions/api/opportunity/upsert";
 
 	var opportunityInfo = new Object();
 
 	if ($('#opportunityID').text()) {
-		url = "/inoutcpqsolutions/api/opportunity/update";
+		url = "/inoutcpqsolutions/api/opportunity/upsert";
 		opportunityInfo.id = $('#opportunityID').text();
 	}
 

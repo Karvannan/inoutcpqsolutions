@@ -20,27 +20,26 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 
 	private static long opportunityId = 400000000000000000l;
 
-	public OpportunityVo create(OpportunityVo opportunityVo) {
-
-		OpportunityVo createdOpportunityVo = null;
-
-		++opportunityId;
-
-		opportunityVo.setId(BigDecimal.valueOf(opportunityId).toPlainString());
-		
-		opportunityMap.put(opportunityVo.getId(), opportunityVo);
-
-		createdOpportunityVo = opportunityMap.get(opportunityVo.getId());
-
-		return createdOpportunityVo;
-	}
-
-	public OpportunityVo update(OpportunityVo opportunityVo) {
+	public OpportunityVo upsert(OpportunityVo opportunityVo) {
 		OpportunityVo updatedOpportunityVo = null;
 
-		opportunityMap.put(opportunityVo.getId(), opportunityVo);
+		if (opportunityVo != null && opportunityVo.getId() != null
+				&& !"".equalsIgnoreCase(opportunityVo.getId())) {
+			opportunityMap.put(opportunityVo.getId(), opportunityVo);
 
-		updatedOpportunityVo = opportunityMap.get(opportunityVo.getId());
+			updatedOpportunityVo = opportunityMap.get(opportunityVo.getId());
+
+		} else {
+			++opportunityId;
+
+			opportunityVo.setId(BigDecimal.valueOf(opportunityId)
+					.toPlainString());
+
+			opportunityMap.put(opportunityVo.getId(), opportunityVo);
+
+			updatedOpportunityVo = opportunityMap.get(opportunityVo.getId());
+
+		}
 
 		return updatedOpportunityVo;
 	}

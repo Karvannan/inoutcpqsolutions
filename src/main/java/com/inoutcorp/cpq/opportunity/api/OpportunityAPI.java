@@ -12,11 +12,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 
 import com.inoutcorp.cpq.opportunity.service.OpportunityCRUDService;
 import com.inoutcorp.cpq.opportunity.service.impl.OpportunityCRUDServiceImpl;
+import com.inoutcorp.cpq.opportunity.utils.JSONUtils;
 import com.inoutcorp.cpq.opportunity.vo.InOutCorpResponse;
 import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 
@@ -32,38 +34,29 @@ public class OpportunityAPI {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response healthCheck() {
 		InOutCorpResponse response = new InOutCorpResponse();
-
 		response.putMessage("result", "success");
-
 		return Response.ok().entity(response).build();
 	}
 
-	@Path("/create")
+	@Path("/upsert")
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public Response create(OpportunityVo opportunityVo) {
+	public Response upsert(OpportunityVo opportunityVo) {
 		InOutCorpResponse response = new InOutCorpResponse();
 
-		opportunityVo = service.create(opportunityVo);
-
-		response.putMessage("result", opportunityVo);
-
-		return Response.ok().entity(response).build();
-	}
-
-	@Path("/update")
-	@POST
-	@Produces({ MediaType.APPLICATION_JSON })
-	@Consumes({ MediaType.APPLICATION_JSON })
-	public Response update(OpportunityVo opportunityVo) {
-		InOutCorpResponse response = new InOutCorpResponse();
-
-		opportunityVo = service.update(opportunityVo);
-
-		response.putMessage("result", opportunityVo);
-
-		return Response.ok().entity(response).build();
+		try {
+			opportunityVo = service.upsert(opportunityVo);
+			response.putMessage("result", opportunityVo);
+			return Response.ok().entity(response).build();
+		} catch (Exception e) {
+			LOGGER.debug("Errored Request "
+					+ JSONUtils.getJSONStringFromObject(opportunityVo));
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
+		}
 	}
 
 	@Path("/delete/{id}")
@@ -72,11 +65,16 @@ public class OpportunityAPI {
 	public Response delete(@PathParam("id") String id) {
 		InOutCorpResponse response = new InOutCorpResponse();
 
-		boolean result = service.delete(id);
-
-		response.putMessage("result", result);
-
-		return Response.ok().entity(response).build();
+		try {
+			boolean result = service.delete(id);
+			response.putMessage("result", result);
+			return Response.ok().entity(response).build();
+		} catch (Exception e) {
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
+		}
 
 	}
 
@@ -86,11 +84,17 @@ public class OpportunityAPI {
 	public Response read(@QueryParam("id") String id) {
 		InOutCorpResponse response = new InOutCorpResponse();
 
-		OpportunityVo opportunityVo = service.read(id);
+		try {
+			OpportunityVo opportunityVo = service.read(id);
+			response.putMessage("result", opportunityVo);
+			return Response.ok().entity(response).build();
+		} catch (Exception e) {
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
+		}
 
-		response.putMessage("result", opportunityVo);
-
-		return Response.ok().entity(response).build();
 	}
 
 	@Path("/readAll")
@@ -104,12 +108,33 @@ public class OpportunityAPI {
 			List<OpportunityVo> opportunityVos = service.readAll(pageNo,
 					pageSize, sortBy, asc);
 			response.putMessage("result", opportunityVos);
-
+			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
+		}
+	}
+
+	@Path("/testRequest")
+	@POST
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public Response testRequest(String stringRequest) {
+		InOutCorpResponse response = new InOutCorpResponse();
+
+		try {
+			LOGGER.info("stringRequest " + stringRequest);
+			response.putMessage("result", stringRequest);
+			return Response.ok().entity(response).build();
+		} catch (Exception e) {
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
 		}
 
-		return Response.ok().entity(response).build();
 	}
 
 }

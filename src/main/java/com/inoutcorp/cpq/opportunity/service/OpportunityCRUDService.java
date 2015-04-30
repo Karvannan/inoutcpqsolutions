@@ -6,9 +6,7 @@ import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 
 public interface OpportunityCRUDService {
 
-	OpportunityVo create(OpportunityVo opportunityVo);
-
-	OpportunityVo update(OpportunityVo opportunityVo);
+	OpportunityVo upsert(OpportunityVo opportunityVo);
 
 	OpportunityVo read(String id);
 
