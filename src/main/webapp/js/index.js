@@ -7,7 +7,7 @@ function init() {
 
 function addActionListeners() {
 	$('#createNewOpportunity').click(function() {
-		console.log('button clicked');
+		//console.log('button clicked');
 		window.location = 'jsp/editOpportunity.jsp';
 	});
 }
@@ -15,33 +15,83 @@ function addActionListeners() {
 
 function loadAllOpportunities() {
 	var dataTable = $('#example').dataTable();
-	console.log('body loaded');
+	//console.log('body loaded');
 	$.ajax({
 		url: "http://localhost:8080/inoutcpqsolutions/api/opportunity/readAll",
 		dataType: 'json',
 		success: function(result){
-			console.log('connection success');
+			//console.log('connection success');
 			dataTable.fnClearTable();
 	        readAllObject = result;
 
 	        var opportunityList = result.data.result;
 	        for (var i=0;i<opportunityList.length;i++) {
 	        	var opportunity = opportunityList[i];
-				var editLink = '<a href=\"http://localhost:8080/inoutcpqsolutions/api/opportunity/update\">Edit</a>';
-	        	var deleteLink = '<a href=\"http://localhost:8080/inoutcpqsolutions/api/opportunity/delete/' + opportunity.id +'\">Delete</a>';				
+				var editLink = '<a href=\"http://localhost:8080/inoutcpqsolutions/jsp/editOpportunity.jsp?opportunityID=' + opportunity.id +'\">Edit</a>';
+	        	//console.log(opportunity.id);
+	        	var deleteLink = '<a id=\"'+ opportunity.id +'\" href=\"javascript:deleteOpportunity(\'' + opportunity.id +'\')\">Delete</a>';
 	        	dataTable.fnAddData([
 					editLink + '|' + deleteLink,
 		        	opportunity.id,
 		        	opportunity.name,
 		        	opportunity.amount,
-		        	opportunity.closedDate,
+		        	changedTimeFromJs(opportunity.closedDate),
 		        	opportunity.isoCode,
 		        	opportunity.description,
-		        	opportunity.closed,
-		        	opportunity.deleted,
-		        	opportunity.won
+		        	opportunity.isClosed,
+		        	opportunity.isDeleted,
+		        	opportunity.isWon
 	        	]);
 	        }	        
 		}
 	});
+}
+
+
+function deleteOpportunity(opportunityID) {
+	/*$("#dialog-confirm").dialog({
+	   autoOpen: false,
+	   modal: true,
+	   buttons : {
+	        "Confirm" : function() {
+	            alert("You have confirmed!");            
+	        },
+	        "Cancel" : function() {
+	          $(this).dialog("close");
+	        }
+	      }
+	 });	*/
+    $("#dialog-confirm").dialog({
+    	autoOpen: false,
+        resizable: false,
+        modal: true,
+        title: "Confirm Delete?",
+        height: 100,
+        width: 100,
+        buttons: {
+            "Yes": function () {
+				$.ajax({
+					url : "http://localhost:8080/inoutcpqsolutions/api/opportunity/delete/" + opportunityID,
+			        type: 'DELETE',
+			        success: function(result) {
+			        	//console.log('deleted ' + opportunityID);
+						loadAllOpportunities();
+			        }
+			    });
+            },
+                "No": function () {
+                $(this).dialog('close');
+                console.log('Dialog box closed');
+            }
+        }
+    });
+}
+
+function changedTimeFromJs(milliDate){
+	var formatedDate = new Date(new Number(milliDate));
+	/*var displayDate = formatedDate.getUTCMonth()+1+'-'+formatedDate.getUTCDate()+'-'+formatedDate.getUTCFullYear()+' '+ formatedDate.toUTCString().substring(17, 26);*/
+	var month = formatedDate.getUTCMonth() + 1;
+	month = month<9?'0'+month:month;
+	var displayDate = formatedDate.getUTCFullYear()+'-'+month+'-'+formatedDate.getUTCDate();
+	return displayDate;
 }

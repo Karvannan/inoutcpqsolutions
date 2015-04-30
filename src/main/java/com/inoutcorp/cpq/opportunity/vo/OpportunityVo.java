@@ -11,7 +11,7 @@ public class OpportunityVo implements Serializable {
 
 	private String name;
 
-	private long amount;
+	private Long amount;
 
 	private Date closedDate;
 
@@ -19,11 +19,11 @@ public class OpportunityVo implements Serializable {
 
 	private String description;
 
-	private boolean isClosed;
+	private Boolean isClosed;
 
-	private boolean isDeleted;
+	private Boolean isDeleted;
 
-	private boolean isWon;
+	private Boolean isWon;
 
 	public String getId() {
 		return id;
@@ -41,11 +41,11 @@ public class OpportunityVo implements Serializable {
 		this.name = name;
 	}
 
-	public long getAmount() {
+	public Long getAmount() {
 		return amount;
 	}
 
-	public void setAmount(long amount) {
+	public void setAmount(Long amount) {
 		this.amount = amount;
 	}
 
@@ -73,27 +73,27 @@ public class OpportunityVo implements Serializable {
 		this.description = description;
 	}
 
-	public boolean isClosed() {
+	public Boolean getIsClosed() {
 		return isClosed;
 	}
 
-	public void setClosed(boolean isClosed) {
+	public void setIsClosed(Boolean isClosed) {
 		this.isClosed = isClosed;
 	}
 
-	public boolean isDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 
-	public void setDeleted(boolean isDeleted) {
+	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
 
-	public boolean isWon() {
+	public Boolean getIsWon() {
 		return isWon;
 	}
 
-	public void setWon(boolean isWon) {
+	public void setIsWon(Boolean isWon) {
 		this.isWon = isWon;
 	}
 

@@ -3,8 +3,11 @@
 	<head>
 		<title>Opportunity Info</title>
 		<script type="text/javascript" src="../js/editOpportunity.js"></script>
-    	<script type="text/javascript" src="../js/jquery.js"></script>	
+		<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
     	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js"></script>
+		<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
     	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
     	
@@ -38,13 +41,13 @@
 					<td>Description</td>
 					<td><input type="text" name="oppDescription" id="oppDescription"></td>
 					<td>isClosed</td>
-					<td><input type="text" name="oppIsClosed" id="oppIsClosed"></td>
+					<td><input type="checkbox" name="oppIsClosed" id="oppIsClosed"></td>
 				</tr>
 				<tr>
 					<td>isWon</td>
-					<td><input type="text" name="oppIsWon" id="oppIsWon"></td>
+					<td><input type="checkbox" name="oppIsWon" id="oppIsWon"></td>
 					<td>isDeleted</td>
-					<td><input type="text" name="oppIsDeleted" id="oppIsDeleted"></td>
+					<td><input type="checkbox" name="oppIsDeleted" id="oppIsDeleted"></td>
 				</tr>
 				<tr>
 					<td></td>
