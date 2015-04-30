@@ -49,42 +49,20 @@ function loadAllOpportunities() {
 
 
 function deleteOpportunity(opportunityID) {
-	/*$("#dialog-confirm").dialog({
-	   autoOpen: false,
-	   modal: true,
-	   buttons : {
-	        "Confirm" : function() {
-	            alert("You have confirmed!");            
-	        },
-	        "Cancel" : function() {
-	          $(this).dialog("close");
+	//$("#dialog-confirm").dialog("open");
+	var deleteOpp = confirm("Sure You want to Delete?");
+	if (deleteOpp == true) {
+		$.ajax({
+			url : "http://localhost:8080/inoutcpqsolutions/api/opportunity/delete/" + opportunityID,
+	        type: 'DELETE',
+	        success: function(result) {
+	        	//console.log('deleted ' + opportunityID);
+				loadAllOpportunities();
 	        }
-	      }
-	 });	*/
-    $("#dialog-confirm").dialog({
-    	autoOpen: false,
-        resizable: false,
-        modal: true,
-        title: "Confirm Delete?",
-        height: 100,
-        width: 100,
-        buttons: {
-            "Yes": function () {
-				$.ajax({
-					url : "http://localhost:8080/inoutcpqsolutions/api/opportunity/delete/" + opportunityID,
-			        type: 'DELETE',
-			        success: function(result) {
-			        	//console.log('deleted ' + opportunityID);
-						loadAllOpportunities();
-			        }
-			    });
-            },
-                "No": function () {
-                $(this).dialog('close');
-                console.log('Dialog box closed');
-            }
-        }
-    });
+	    });	    
+	} else {
+	    console.log('cancel');
+	}
 }
 
 function changedTimeFromJs(milliDate){

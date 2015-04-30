@@ -57,6 +57,11 @@ function addActionListeners() {
 
 
 function saveOpportunity() {
+
+	if (!/^[0-9]{1,10}$/.test($('#oppAmount').val())) {
+		alert('Amount should be number');
+		return;
+	}
 	var url = "http://localhost:8080/inoutcpqsolutions/api/opportunity/create";
 
 	var opportunityInfo = new Object();
@@ -92,7 +97,7 @@ function saveOpportunity() {
 			// console.log(msg.data.result.id);
 		},
 		error : function(jqXHR, textStatus, error) {
-			// console.log(error);
+			console.log(error);
 			// console.log(textStatus);
 			// console.log(jqXHR);
 		}

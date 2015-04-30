@@ -42,10 +42,5 @@
 			    </table>
 
 		</div>
-
-		<div id="dialog-confirm">
-		</div>
-		
-
 	</body>
 </html>
