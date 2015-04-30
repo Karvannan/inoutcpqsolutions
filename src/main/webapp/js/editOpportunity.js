@@ -16,7 +16,7 @@ function checkForQueryParameter() {
 				$('#opportunityID').text(opportunityID);
 				$('#opportunityIDDiv').text('Opportunity ID - ' + opportunityID);
 				$.ajax({
-						url: "http://localhost:8080/inoutcpqsolutions/api/opportunity/read?id=" + opportunityID,
+						url: "/inoutcpqsolutions/api/opportunity/read?id=" + opportunityID,
 						dataType: 'json',
 						success: function(result){							
 							$('#oppName').val(result.data.result.name);
@@ -47,10 +47,10 @@ function addActionListeners() {
 		saveOpportunity();
 	});
 	$('#reset').click(function() {
-		window.location = 'http://localhost:8080/inoutcpqsolutions/jsp/editOpportunity.jsp';
+		window.location = '/inoutcpqsolutions/jsp/editOpportunity.jsp';
 	});
 	$('#back').click(function() {
-		window.location = 'http://localhost:8080/inoutcpqsolutions';
+		window.location = '/inoutcpqsolutions';
 	});
 }
 
@@ -62,12 +62,12 @@ function saveOpportunity() {
 		alert('Amount should be number');
 		return;
 	}
-	var url = "http://localhost:8080/inoutcpqsolutions/api/opportunity/create";
+	var url = "/inoutcpqsolutions/api/opportunity/create";
 
 	var opportunityInfo = new Object();
 
 	if ($('#opportunityID').text()) {
-		url = "http://localhost:8080/inoutcpqsolutions/api/opportunity/update";
+		url = "/inoutcpqsolutions/api/opportunity/update";
 		opportunityInfo.id = $('#opportunityID').text();
 	}
 

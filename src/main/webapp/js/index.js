@@ -17,7 +17,7 @@ function loadAllOpportunities() {
 	var dataTable = $('#example').dataTable();
 	//console.log('body loaded');
 	$.ajax({
-		url: "http://localhost:8080/inoutcpqsolutions/api/opportunity/readAll",
+		url: "/inoutcpqsolutions/api/opportunity/readAll",
 		dataType: 'json',
 		success: function(result){
 			//console.log('connection success');
@@ -27,7 +27,7 @@ function loadAllOpportunities() {
 	        var opportunityList = result.data.result;
 	        for (var i=0;i<opportunityList.length;i++) {
 	        	var opportunity = opportunityList[i];
-				var editLink = '<a href=\"http://localhost:8080/inoutcpqsolutions/jsp/editOpportunity.jsp?opportunityID=' + opportunity.id +'\">Edit</a>';
+				var editLink = '<a href=\"/inoutcpqsolutions/jsp/editOpportunity.jsp?opportunityID=' + opportunity.id +'\">Edit</a>';
 	        	//console.log(opportunity.id);
 	        	var deleteLink = '<a id=\"'+ opportunity.id +'\" href=\"javascript:deleteOpportunity(\'' + opportunity.id +'\')\">Delete</a>';
 	        	dataTable.fnAddData([
@@ -53,7 +53,7 @@ function deleteOpportunity(opportunityID) {
 	var deleteOpp = confirm("Sure You want to Delete?");
 	if (deleteOpp == true) {
 		$.ajax({
-			url : "http://localhost:8080/inoutcpqsolutions/api/opportunity/delete/" + opportunityID,
+			url : "/inoutcpqsolutions/api/opportunity/delete/" + opportunityID,
 	        type: 'DELETE',
 	        success: function(result) {
 	        	//console.log('deleted ' + opportunityID);
