@@ -1,3 +1,5 @@
+var errorObj = '';
+
 function init() {
 	$( "#oppClosedDate" ).datepicker({dateFormat: 'yy-mm-dd'});
 	checkForQueryParameter();
@@ -15,6 +17,7 @@ function checkForQueryParameter() {
 			} else {
 				$('#opportunityID').text(opportunityID);
 				$('#opportunityIDDiv').text('Opportunity ID - ' + opportunityID);
+				$('#opportunityIDDiv').css({ 'color': 'green', 'font-size': '125%' });
 				$.ajax({
 						url: "/inoutcpqsolutions/api/opportunity/read?id=" + opportunityID,
 						dataType: 'json',
@@ -47,6 +50,7 @@ function addActionListeners() {
 		saveOpportunity();
 	});
 	$('#reset').click(function() {
+		saveOpportunity();
 		window.location = '/inoutcpqsolutions/jsp/editOpportunity.jsp';
 	});
 	$('#back').click(function() {
@@ -59,9 +63,11 @@ function addActionListeners() {
 function saveOpportunity() {
 
 	if (!/^[0-9]{1,10}$/.test($('#oppAmount').val())) {
-		alert('Amount should be number');
+		$('#opportunityIDDiv').text('Field - Amount should be number');
+		$('#opportunityIDDiv').css({ 'color': 'red', 'font-size': '125%' });		
 		return;
 	}
+
 	var url = "/inoutcpqsolutions/api/opportunity/upsert";
 
 	var opportunityInfo = new Object();
@@ -87,19 +93,24 @@ function saveOpportunity() {
         data: JSON.stringify(opportunityInfo),
         contentType: 'application/json',
 		success : function(msg) {
-			if ($('#opportunityID').text()) {
-				$('#opportunityIDDiv').text('Opportunity Updated Successfully. Opportunity ID - ' + msg.data.result.id);
+			/*if ($('#opportunityID').text()) {
+				$('#opportunityIDDiv').text('Opportunity Saved Successfully. Opportunity ID - ' + msg.data.result.id);
 			} else {
 				$('#opportunityIDDiv').text('Opportunity Created Successfully. Opportunity ID - ' + msg.data.result.id);
-			}
+			}*/
+			$('#opportunityIDDiv').text('Opportunity Saved Successfully. Opportunity ID - ' + msg.data.result.id);
+			$('#opportunityIDDiv').css({ 'color': 'green', 'font-size': '125%' });
 			$('#opportunityID').text(msg.data.result.id);
 			
 			// console.log(msg.data.result.id);
 		},
-		error : function(jqXHR, textStatus, error) {
+		error : function(jqXHR, textStatus, error) {			
+			$('#opportunityIDDiv').text(error + ' - ' + jqXHR.responseText);
+			$('#opportunityIDDiv').css({ 'color': 'red', 'font-size': '125%' });
 			console.log(error);
-			// console.log(textStatus);
-			// console.log(jqXHR);
+			console.log(textStatus);
+			errorObj = jqXHR.responseText;
+			console.log(jqXHR);
 		}
 	});
 

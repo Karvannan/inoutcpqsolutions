@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.inoutcorp.cpq.opportunity.service.OpportunityCRUDService;
+import com.inoutcorp.cpq.opportunity.utils.InOutCPQConstants;
 import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 
 public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
@@ -18,7 +19,7 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 
 	private static final Map<String, OpportunityVo> opportunityMap = new HashMap<String, OpportunityVo>();
 
-	private static long opportunityId = 400000000000000000l;
+	private static long opportunityId = InOutCPQConstants.OPPORTUNITY_SEQUENCE_NUMBER;
 
 	public OpportunityVo upsert(OpportunityVo opportunityVo) {
 		OpportunityVo updatedOpportunityVo = null;

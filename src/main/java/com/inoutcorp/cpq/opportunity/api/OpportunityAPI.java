@@ -18,27 +18,28 @@ import org.apache.log4j.Logger;
 
 import com.inoutcorp.cpq.opportunity.service.OpportunityCRUDService;
 import com.inoutcorp.cpq.opportunity.service.impl.OpportunityCRUDServiceImpl;
+import com.inoutcorp.cpq.opportunity.utils.InOutCPQConstants;
 import com.inoutcorp.cpq.opportunity.utils.JSONUtils;
 import com.inoutcorp.cpq.opportunity.vo.InOutCorpResponse;
 import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 
-@Path("/opportunity")
+@Path(InOutCPQConstants.API_OPPORTUNITY)
 public class OpportunityAPI {
 
 	private static final Logger LOGGER = Logger.getLogger(OpportunityAPI.class);
 
 	private static final OpportunityCRUDService service = new OpportunityCRUDServiceImpl();
 
-	@Path("/healthCheck")
+	@Path(InOutCPQConstants.API_HEALTH_CHECK)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response healthCheck() {
 		InOutCorpResponse response = new InOutCorpResponse();
-		response.putMessage("result", "success");
+		response.putMessage(InOutCPQConstants.RESULT, InOutCPQConstants.SUCCESS);
 		return Response.ok().entity(response).build();
 	}
 
-	@Path("/upsert")
+	@Path(InOutCPQConstants.API_UPSERT)
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -47,7 +48,7 @@ public class OpportunityAPI {
 
 		try {
 			opportunityVo = service.upsert(opportunityVo);
-			response.putMessage("result", opportunityVo);
+			response.putMessage(InOutCPQConstants.RESULT, opportunityVo);
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.debug("Errored Request "
@@ -67,7 +68,7 @@ public class OpportunityAPI {
 
 		try {
 			boolean result = service.delete(id);
-			response.putMessage("result", result);
+			response.putMessage(InOutCPQConstants.RESULT, result);
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Error ", e);
@@ -78,15 +79,15 @@ public class OpportunityAPI {
 
 	}
 
-	@Path("/read")
+	@Path(InOutCPQConstants.API_READ)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response read(@QueryParam("id") String id) {
+	public Response read(@QueryParam(InOutCPQConstants.ID) String id) {
 		InOutCorpResponse response = new InOutCorpResponse();
 
 		try {
 			OpportunityVo opportunityVo = service.read(id);
-			response.putMessage("result", opportunityVo);
+			response.putMessage(InOutCPQConstants.RESULT, opportunityVo);
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Error ", e);
@@ -97,7 +98,7 @@ public class OpportunityAPI {
 
 	}
 
-	@Path("/readAll")
+	@Path(InOutCPQConstants.API_READALL)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response readAll(@QueryParam("pageNo") Long pageNo,
@@ -107,7 +108,7 @@ public class OpportunityAPI {
 		try {
 			List<OpportunityVo> opportunityVos = service.readAll(pageNo,
 					pageSize, sortBy, asc);
-			response.putMessage("result", opportunityVos);
+			response.putMessage(InOutCPQConstants.RESULT, opportunityVos);
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Error ", e);
@@ -117,7 +118,7 @@ public class OpportunityAPI {
 		}
 	}
 
-	@Path("/testRequest")
+	@Path(InOutCPQConstants.API_TEST_REQUEST)
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
@@ -126,7 +127,7 @@ public class OpportunityAPI {
 
 		try {
 			LOGGER.info("stringRequest " + stringRequest);
-			response.putMessage("result", stringRequest);
+			response.putMessage(InOutCPQConstants.RESULT, stringRequest);
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Error ", e);
