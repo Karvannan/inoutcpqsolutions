@@ -19,17 +19,29 @@ import org.apache.log4j.Logger;
 import com.inoutcorp.cpq.opportunity.service.OpportunityCRUDService;
 import com.inoutcorp.cpq.opportunity.service.impl.OpportunityCRUDServiceImpl;
 import com.inoutcorp.cpq.opportunity.utils.InOutCPQConstants;
+import com.inoutcorp.cpq.opportunity.utils.InOutException;
 import com.inoutcorp.cpq.opportunity.utils.JSONUtils;
 import com.inoutcorp.cpq.opportunity.vo.InOutCorpResponse;
 import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 
+/**
+ * The Class OpportunityAPI.
+ */
 @Path(InOutCPQConstants.API_OPPORTUNITY)
 public class OpportunityAPI {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger.getLogger(OpportunityAPI.class);
 
+	/** The Constant service. */
 	private static final OpportunityCRUDService service = new OpportunityCRUDServiceImpl();
 
+	/**
+	 * Health check. This API is to perform health check operation To make sure
+	 * whether the service is up and running
+	 *
+	 * @return the response
+	 */
 	@Path(InOutCPQConstants.API_HEALTH_CHECK)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -39,6 +51,16 @@ public class OpportunityAPI {
 		return Response.ok().entity(response).build();
 	}
 
+	/**
+	 * Upsert. This API performs both insert & update operation of the
+	 * Opportunity. If ID is passed in the request, then it updates the existing
+	 * opportunity if ID is not passed in the request, it creates a new
+	 * opportunity
+	 *
+	 * @param opportunityVo
+	 *            the opportunity vo
+	 * @return the response
+	 */
 	@Path(InOutCPQConstants.API_UPSERT)
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -60,7 +82,14 @@ public class OpportunityAPI {
 		}
 	}
 
-	@Path("/delete/{id}")
+	/**
+	 * Delete. Deletes the opportunity using the ID
+	 *
+	 * @param id
+	 *            the id
+	 * @return the response
+	 */
+	@Path(InOutCPQConstants.API_DELETE)
 	@DELETE
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response delete(@PathParam("id") String id) {
@@ -70,6 +99,11 @@ public class OpportunityAPI {
 			boolean result = service.delete(id);
 			response.putMessage(InOutCPQConstants.RESULT, result);
 			return Response.ok().entity(response).build();
+		} catch (InOutException e) {
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Error ", e);
 			response.setErrors(e);
@@ -79,6 +113,13 @@ public class OpportunityAPI {
 
 	}
 
+	/**
+	 * Read. Retrieves the Opportunity using the ID
+	 *
+	 * @param id
+	 *            the id
+	 * @return the response
+	 */
 	@Path(InOutCPQConstants.API_READ)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -89,6 +130,11 @@ public class OpportunityAPI {
 			OpportunityVo opportunityVo = service.read(id);
 			response.putMessage(InOutCPQConstants.RESULT, opportunityVo);
 			return Response.ok().entity(response).build();
+		} catch (InOutException e) {
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Error ", e);
 			response.setErrors(e);
@@ -98,6 +144,19 @@ public class OpportunityAPI {
 
 	}
 
+	/**
+	 * Read all. Retrieves all opportunities
+	 *
+	 * @param pageNo
+	 *            the page no
+	 * @param pageSize
+	 *            the page size
+	 * @param sortBy
+	 *            the sort by
+	 * @param asc
+	 *            the asc
+	 * @return the response
+	 */
 	@Path(InOutCPQConstants.API_READALL)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
@@ -118,6 +177,14 @@ public class OpportunityAPI {
 		}
 	}
 
+	/**
+	 * Test request. This API is to test the request JSON structure. This will
+	 * be useful to debug the data type mismatch errors in Rest API Call
+	 *
+	 * @param stringRequest
+	 *            the string request
+	 * @return the response
+	 */
 	@Path(InOutCPQConstants.API_TEST_REQUEST)
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
