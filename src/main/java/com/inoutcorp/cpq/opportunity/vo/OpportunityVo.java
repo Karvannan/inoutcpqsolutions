@@ -43,18 +43,6 @@ public class OpportunityVo implements Serializable {
 	 *
 	 * @return the id
 	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * Sets the id.
-	 *
-	 * @param id the new id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	/**
 	 * Gets the name.
@@ -66,9 +54,29 @@ public class OpportunityVo implements Serializable {
 	}
 
 	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * Sets the id.
+	 *
+	 * @param id
+	 *            the new id
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
 	 * Sets the name.
 	 *
-	 * @param name the new name
+	 * @param name
+	 *            the new name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -86,7 +94,8 @@ public class OpportunityVo implements Serializable {
 	/**
 	 * Sets the amount.
 	 *
-	 * @param amount the new amount
+	 * @param amount
+	 *            the new amount
 	 */
 	public void setAmount(Long amount) {
 		this.amount = amount;
@@ -104,7 +113,8 @@ public class OpportunityVo implements Serializable {
 	/**
 	 * Sets the closed date.
 	 *
-	 * @param closedDate the new closed date
+	 * @param closedDate
+	 *            the new closed date
 	 */
 	public void setClosedDate(Date closedDate) {
 		this.closedDate = closedDate;
@@ -122,7 +132,8 @@ public class OpportunityVo implements Serializable {
 	/**
 	 * Sets the iso code.
 	 *
-	 * @param isoCode the new iso code
+	 * @param isoCode
+	 *            the new iso code
 	 */
 	public void setIsoCode(String isoCode) {
 		this.isoCode = isoCode;
@@ -140,7 +151,8 @@ public class OpportunityVo implements Serializable {
 	/**
 	 * Sets the description.
 	 *
-	 * @param description the new description
+	 * @param description
+	 *            the new description
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -158,7 +170,8 @@ public class OpportunityVo implements Serializable {
 	/**
 	 * Sets the checks if is closed.
 	 *
-	 * @param isClosed the new checks if is closed
+	 * @param isClosed
+	 *            the new checks if is closed
 	 */
 	public void setIsClosed(Boolean isClosed) {
 		this.isClosed = isClosed;
@@ -176,7 +189,8 @@ public class OpportunityVo implements Serializable {
 	/**
 	 * Sets the checks if is deleted.
 	 *
-	 * @param isDeleted the new checks if is deleted
+	 * @param isDeleted
+	 *            the new checks if is deleted
 	 */
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
@@ -194,7 +208,8 @@ public class OpportunityVo implements Serializable {
 	/**
 	 * Sets the checks if is won.
 	 *
-	 * @param isWon the new checks if is won
+	 * @param isWon
+	 *            the new checks if is won
 	 */
 	public void setIsWon(Boolean isWon) {
 		this.isWon = isWon;

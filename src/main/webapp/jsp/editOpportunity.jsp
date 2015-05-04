@@ -54,6 +54,7 @@
 					<td>
 						<button type="button" class="btn btn-default my-button-style" id="saveOpportunity">Save</button>						
 						<button type="button" class="btn btn-default my-button-style" id="reset">Save & New</button>
+						<button type="button" class="btn btn-default my-button-style" id="delete">Delete</button>
 						<button type="button" class="btn btn-default my-button-style" id="back">Back</button>
 					</td>
 				</tr>				

@@ -1,5 +1,3 @@
-var errorObj = '';
-
 function init() {
 	$( "#oppClosedDate" ).datepicker({dateFormat: 'yy-mm-dd'});
 	checkForQueryParameter();
@@ -15,7 +13,7 @@ function checkForQueryParameter() {
 			if (opportunityID == 'undefined' || opportunityID == 'null' || opportunityID == '' || opportunityID == "") {
 				// // console.log('Create Request');
 			} else {
-				$('#opportunityID').text(opportunityID);
+				$('#opportunityID').text(opportunityID).trigger('change');
 				$('#opportunityIDDiv').text('Opportunity ID - ' + opportunityID);
 				$('#opportunityIDDiv').css({ 'color': 'green', 'font-size': '125%' });
 				$.ajax({
@@ -56,8 +54,45 @@ function addActionListeners() {
 	$('#back').click(function() {
 		window.location = '/inoutcpqsolutions';
 	});
+	$('#delete').click(function() {
+		if ($('#opportunityID').text()) {
+			deleteOpportunity($('#opportunityID').text());
+			window.location = '/inoutcpqsolutions';
+		}
+	});
+	if ($('#opportunityID').text()) {
+		$('#delete').show();
+	} else {
+		$('#delete').hide();
+	}
+	$('#opportunityID').change( function() {
+		if ($('#opportunityID').text()) {
+			$('#delete').show();
+		} else {
+			$('#delete').hide();
+		}
+	}); 
 }
 
+function deleteOpportunity(opportunityID) {
+	//$("#dialog-confirm").dialog("open");
+	var deleteOpp = confirm("Sure You want to Delete?");
+	if (deleteOpp == true) {
+		$.ajax({
+			url : "/inoutcpqsolutions/api/opportunity/delete/" + opportunityID,
+	        type: 'DELETE',
+	        success: function(result) {
+	        	//console.log('deleted ' + opportunityID);
+	        },error : function(jqXHR, textStatus, error) {			
+				console.log(error);
+				console.log(textStatus);
+				console.log(jqXHR);
+			}
+	    });	    
+	} else {
+	    console.log('cancel');
+	}
+}
 
 
 function saveOpportunity() {
@@ -68,24 +103,27 @@ function saveOpportunity() {
 		return;
 	}
 
-	var url = "/inoutcpqsolutions/api/opportunity/upsert";
+	var url = "/inoutcpqsolutions/api/opportunity/upsert";	
 
-	var opportunityInfo = new Object();
+	var opportunityInfo = [];
+
+	var opportunityVo = new Object();
 
 	if ($('#opportunityID').text()) {
 		url = "/inoutcpqsolutions/api/opportunity/upsert";
-		opportunityInfo.id = $('#opportunityID').text();
+		opportunityVo.id = $('#opportunityID').text();
 	}
 
-	opportunityInfo.name = $('#oppName').val();
-	opportunityInfo.description = $('#oppDescription').val();
-	opportunityInfo.isClosed = $('#oppIsClosed').attr('checked')?true:false;
-	opportunityInfo.isDeleted = $('#oppIsDeleted').attr('checked')?true:false;
-	opportunityInfo.isWon = $('#oppIsWon').attr('checked')?true:false;
-	opportunityInfo.amount = $('#oppAmount').val();
-	opportunityInfo.closedDate = $('#oppClosedDate').val();
-	opportunityInfo.isoCode = $('#oppISOCode').val();
-	// console.log(JSON.stringify(opportunityInfo));
+	opportunityVo.name = $('#oppName').val();
+	opportunityVo.description = $('#oppDescription').val();
+	opportunityVo.isClosed = $('#oppIsClosed').attr('checked')?true:false;
+	opportunityVo.isDeleted = $('#oppIsDeleted').attr('checked')?true:false;
+	opportunityVo.isWon = $('#oppIsWon').attr('checked')?true:false;
+	opportunityVo.amount = $('#oppAmount').val();
+	opportunityVo.closedDate = $('#oppClosedDate').val();
+	opportunityVo.isoCode = $('#oppISOCode').val();
+	// console.log(JSON.stringify(opportunityVo));
+	opportunityInfo.push(opportunityVo);
 	$.ajax({
 		url : url,
         type: 'POST',
@@ -98,9 +136,9 @@ function saveOpportunity() {
 			} else {
 				$('#opportunityIDDiv').text('Opportunity Created Successfully. Opportunity ID - ' + msg.data.result.id);
 			}*/
-			$('#opportunityIDDiv').text('Opportunity Saved Successfully. Opportunity ID - ' + msg.data.result.id);
+			$('#opportunityIDDiv').text('Opportunity Saved Successfully. Opportunity ID - ' + msg.data.result[0]);
 			$('#opportunityIDDiv').css({ 'color': 'green', 'font-size': '125%' });
-			$('#opportunityID').text(msg.data.result.id);
+			$('#opportunityID').text(msg.data.result[0]).trigger('change');
 			
 			// console.log(msg.data.result.id);
 		},
@@ -109,7 +147,6 @@ function saveOpportunity() {
 			$('#opportunityIDDiv').css({ 'color': 'red', 'font-size': '125%' });
 			console.log(error);
 			console.log(textStatus);
-			errorObj = jqXHR.responseText;
 			console.log(jqXHR);
 		}
 	});

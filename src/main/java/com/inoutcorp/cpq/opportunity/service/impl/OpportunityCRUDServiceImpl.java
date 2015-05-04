@@ -2,9 +2,10 @@ package com.inoutcorp.cpq.opportunity.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 
@@ -24,10 +25,26 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 			.getLogger(OpportunityCRUDServiceImpl.class);
 
 	/** The Constant opportunityMap. */
-	private static final Map<String, OpportunityVo> opportunityMap = new HashMap<String, OpportunityVo>();
+	private static final Map<String, OpportunityVo> opportunityMap = new ConcurrentHashMap<String, OpportunityVo>();
 
 	/** The opportunity id. */
-	private static long opportunityId = InOutCPQConstants.OPPORTUNITY_SEQUENCE_NUMBER;
+	private static AtomicLong opportunityId = new AtomicLong(
+			InOutCPQConstants.OPPORTUNITY_SEQUENCE_NUMBER);
+
+	/**
+	 * Upsert.
+	 *
+	 * @param opportunityVos
+	 *            the opportunity vos
+	 * @return the opportunity vo
+	 */
+	public List<String> upsert(List<OpportunityVo> opportunityVos) {
+		List<String> ids = new ArrayList<String>();
+		for (OpportunityVo opportunityVo : opportunityVos) {
+			ids.add(upsert(opportunityVo).getId());
+		}
+		return ids;
+	}
 
 	/**
 	 * upsert. This method saves or updates new opportunity
@@ -39,18 +56,12 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	public OpportunityVo upsert(OpportunityVo opportunityVo) {
 		OpportunityVo updatedOpportunityVo = null;
 
-		if (opportunityVo != null && opportunityVo.getId() != null
-				&& !"".equalsIgnoreCase(opportunityVo.getId())) {
+		if (opportunityVo != null && opportunityVo.getId() != null) {
 			/*
 			 * If opportunity ID is provided, then its update request
 			 */
 
-			synchronized (opportunityMap) {
-				/*
-				 * Use synchronized block to write into the opportunity Map
-				 */
-				opportunityMap.put(opportunityVo.getId(), opportunityVo);
-			}
+			opportunityMap.put(opportunityVo.getId(), opportunityVo);
 
 			updatedOpportunityVo = opportunityMap.get(opportunityVo.getId());
 
@@ -60,17 +71,14 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 			 * If Opportunity ID is not provided, then its create request
 			 */
 
-			synchronized (opportunityMap) {
-				/*
-				 * Generate opportunity sequence number
-				 */
-				++opportunityId;
+			/*
+			 * Generate opportunity sequence number
+			 */
 
-				opportunityVo.setId(BigDecimal.valueOf(opportunityId)
-						.toPlainString());
+			opportunityVo.setId(BigDecimal.valueOf(
+					opportunityId.incrementAndGet()).toPlainString());
 
-				opportunityMap.put(opportunityVo.getId(), opportunityVo);
-			}
+			opportunityMap.put(opportunityVo.getId(), opportunityVo);
 
 			updatedOpportunityVo = opportunityMap.get(opportunityVo.getId());
 
@@ -85,6 +93,8 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	 * @param id
 	 *            the opportunity id
 	 * @return the OpportunityVo
+	 * @throws InOutException
+	 *             the in out exception
 	 */
 	public OpportunityVo read(String id) throws InOutException {
 		OpportunityVo opportunityVo = null;
@@ -105,10 +115,11 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	/**
 	 * Delete. This Deletes the Opportunity Object based on the ID
 	 *
-	 * @param opportunityVo
-	 *            the opportunity vo
+	 * @param id
+	 *            the id
 	 * @return the response
 	 * @throws InOutException
+	 *             the in out exception
 	 */
 	public boolean delete(String id) throws InOutException {
 
@@ -118,9 +129,7 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 				throw new InOutException(InOutErrorCodes.NOT_FOUND,
 						"Opportunity Not Found");
 			else
-				synchronized (opportunityMap) {
-					opportunityMap.remove(id);
-				}
+				opportunityMap.remove(id);
 
 		} else {
 			throw new InOutException(InOutErrorCodes.NOT_FOUND,
@@ -133,8 +142,14 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	/**
 	 * readAll. Returns all the opportunities
 	 *
-	 * @param List
-	 *            <OpportunityVo> List of Opportunity
+	 * @param pageNo
+	 *            the page no
+	 * @param pageSize
+	 *            the page size
+	 * @param sortBy
+	 *            the sort by
+	 * @param asc
+	 *            the asc
 	 * @return the opportunityVos
 	 */
 	public List<OpportunityVo> readAll(Long pageNo, Long pageSize,

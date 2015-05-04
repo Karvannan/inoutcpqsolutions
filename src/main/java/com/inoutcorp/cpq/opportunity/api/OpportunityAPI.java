@@ -65,16 +65,16 @@ public class OpportunityAPI {
 	@POST
 	@Produces({ MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_JSON })
-	public Response upsert(OpportunityVo opportunityVo) {
+	public Response upsert(List<OpportunityVo> opportunityVos) {
 		InOutCorpResponse response = new InOutCorpResponse();
 
 		try {
-			opportunityVo = service.upsert(opportunityVo);
-			response.putMessage(InOutCPQConstants.RESULT, opportunityVo);
+			response.putMessage(InOutCPQConstants.RESULT,
+					service.upsert(opportunityVos));
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
-			LOGGER.debug("Errored Request "
-					+ JSONUtils.getJSONStringFromObject(opportunityVo));
+			LOGGER.error("Errored Request "
+					+ JSONUtils.getJSONStringFromObject(opportunityVos));
 			LOGGER.error("Error ", e);
 			response.setErrors(e);
 			return Response.status(Status.INTERNAL_SERVER_ERROR)
