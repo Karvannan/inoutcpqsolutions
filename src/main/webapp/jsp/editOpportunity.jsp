@@ -2,15 +2,18 @@
 <html>
 	<head>
 		<title>Opportunity Info</title>
-		<script type="text/javascript" src="../js/editOpportunity.js"></script>
-		<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-		<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
-    	<script type="text/javascript" src="../js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js"></script>
-		<link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript"  src="../js/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript"  src="../js/jquery-migrate-1.2.1.min.js"></script>
+    	<script type="text/javascript" charset="utf8" src="../js/jquery.dataTables.min.js"></script>
+    	<script type="text/javascript" src="../js/bootstrap.min.js"></script>		
+		<script type="text/javascript" src="../js/jquery-ui-1.10.3.min.js"></script>		
+		<script type="text/javascript" src="../js/editOpportunity.js"></script>		
+		
+		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
 
-    	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-    	
+		<link href="../css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css" />    			
+  	
 	</head>
 	<body id="opportunityBody">
 	    <script>

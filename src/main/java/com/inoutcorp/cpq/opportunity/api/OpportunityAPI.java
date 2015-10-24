@@ -74,7 +74,7 @@ public class OpportunityAPI {
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Errored Request "
-					+ JSONUtils.getJSONStringFromObject(opportunityVos));
+					+ JSONUtils.getJSONString(opportunityVos));
 			LOGGER.error("Error ", e);
 			response.setErrors(e);
 			return Response.status(Status.INTERNAL_SERVER_ERROR)

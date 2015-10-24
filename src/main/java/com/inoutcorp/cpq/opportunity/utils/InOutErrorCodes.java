@@ -1,0 +1,5 @@
+package com.inoutcorp.cpq.opportunity.utils;
+
+public enum InOutErrorCodes {
+	AUTH_FAILURE, UNAUTHOURISED, FORBIDDEN, NOT_FOUND, METHOD_NOT_ALLOWED, REQUEST_TIMEOUT, CORE_FIELD_VALIDATION_FAILURE;
+}

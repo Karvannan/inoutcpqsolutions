@@ -25,7 +25,7 @@ public class JSONUtils {
 	 * @param object the object
 	 * @return the JSON string from object
 	 */
-	public static final String getJSONStringFromObject(Object object) {
+	public static final String getJSONString(Object object) {
 		if (object != null) {
 			try {
 				return objectMapper.writeValueAsString(object);
@@ -48,7 +48,7 @@ public class JSONUtils {
 	 * @param className the class name
 	 * @return the object from json string
 	 */
-	public static final <T> T getObjectFromJSONString(String jsonString,
+	public static final <T> T getObject(String jsonString,
 			Class<T> className) {
 		if (jsonString != null && !"".equalsIgnoreCase(jsonString)
 				&& className != null) {
@@ -78,7 +78,7 @@ public class JSONUtils {
 		if (sourceObject != null && destinationClass != null) {
 			try {
 				String jsonString = JSONUtils
-						.getJSONStringFromObject(sourceObject);
+						.getJSONString(sourceObject);
 				return objectMapper.readValue(jsonString, destinationClass);
 			} catch (JsonParseException e) {
 				LOGGER.error("JsonParseException occurred ", e);
