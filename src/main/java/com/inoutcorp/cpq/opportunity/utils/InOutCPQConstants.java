@@ -16,13 +16,13 @@ public interface InOutCPQConstants {
 	public static final String SUCCESS = "success";
 
 	/** The Constant ID. */
-	public static final String ID = "id";
+	public static final String PKEY = "pkey";
 
 	/** The Constant API_UPSERT. */
 	public static final String API_UPSERT = "/upsert";
 
 	/** The Constant API_DELETE. */
-	public static final String API_DELETE = "/delete/{id}";
+	public static final String API_DELETE = "/delete/{pkey}";
 
 	/** The Constant API_READ. */
 	public static final String API_READ = "/read";

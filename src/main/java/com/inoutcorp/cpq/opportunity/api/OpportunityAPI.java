@@ -15,9 +15,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.inoutcorp.cpq.opportunity.service.OpportunityCRUDService;
-import com.inoutcorp.cpq.opportunity.service.impl.OpportunityCRUDServiceImpl;
 import com.inoutcorp.cpq.opportunity.utils.InOutCPQConstants;
 import com.inoutcorp.cpq.opportunity.utils.InOutException;
 import com.inoutcorp.cpq.opportunity.utils.JSONUtils;
@@ -27,14 +28,24 @@ import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 /**
  * The Class OpportunityAPI.
  */
+@Component
 @Path(InOutCPQConstants.API_OPPORTUNITY)
 public class OpportunityAPI {
 
 	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger.getLogger(OpportunityAPI.class);
 
-	/** The Constant service. */
-	private static final OpportunityCRUDService service = new OpportunityCRUDServiceImpl();
+	/** The Constant getService(). */
+	@Autowired
+	private OpportunityCRUDService service;
+
+	public OpportunityCRUDService getService() {
+		return service;
+	}
+
+	public void setService(OpportunityCRUDService service) {
+		this.service = service;
+	}
 
 	/**
 	 * Health check. This API is to perform health check operation To make sure
@@ -69,8 +80,9 @@ public class OpportunityAPI {
 		InOutCorpResponse response = new InOutCorpResponse();
 
 		try {
-			response.putMessage(InOutCPQConstants.RESULT,
-					service.upsert(opportunityVos));
+			if (opportunityVos != null && opportunityVos.size() > 0)
+				response.putMessage(InOutCPQConstants.RESULT, getService()
+						.upsert(opportunityVos));
 			return Response.ok().entity(response).build();
 		} catch (Exception e) {
 			LOGGER.error("Errored Request "
@@ -85,18 +97,18 @@ public class OpportunityAPI {
 	/**
 	 * Delete. Deletes the opportunity using the ID
 	 *
-	 * @param id
+	 * @param pkey
 	 *            the id
 	 * @return the response
 	 */
 	@Path(InOutCPQConstants.API_DELETE)
 	@DELETE
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response delete(@PathParam("id") String id) {
+	public Response delete(@PathParam(InOutCPQConstants.PKEY) Long pkey) {
 		InOutCorpResponse response = new InOutCorpResponse();
 
 		try {
-			boolean result = service.delete(id);
+			boolean result = getService().delete(pkey);
 			response.putMessage(InOutCPQConstants.RESULT, result);
 			return Response.ok().entity(response).build();
 		} catch (InOutException e) {
@@ -116,18 +128,18 @@ public class OpportunityAPI {
 	/**
 	 * Read. Retrieves the Opportunity using the ID
 	 *
-	 * @param id
+	 * @param pkey
 	 *            the id
 	 * @return the response
 	 */
 	@Path(InOutCPQConstants.API_READ)
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON })
-	public Response read(@QueryParam(InOutCPQConstants.ID) String id) {
+	public Response read(@QueryParam(InOutCPQConstants.PKEY) Long pkey) {
 		InOutCorpResponse response = new InOutCorpResponse();
 
 		try {
-			OpportunityVo opportunityVo = service.read(id);
+			OpportunityVo opportunityVo = getService().read(pkey);
 			response.putMessage(InOutCPQConstants.RESULT, opportunityVo);
 			return Response.ok().entity(response).build();
 		} catch (InOutException e) {
@@ -165,7 +177,7 @@ public class OpportunityAPI {
 			@QueryParam("sortBy") String sortBy, @QueryParam("asc") Boolean asc) {
 		InOutCorpResponse response = new InOutCorpResponse();
 		try {
-			List<OpportunityVo> opportunityVos = service.readAll(pageNo,
+			List<OpportunityVo> opportunityVos = getService().readAll(pageNo,
 					pageSize, sortBy, asc);
 			response.putMessage(InOutCPQConstants.RESULT, opportunityVos);
 			return Response.ok().entity(response).build();

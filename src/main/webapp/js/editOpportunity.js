@@ -17,7 +17,7 @@ function checkForQueryParameter() {
 				$('#opportunityIDDiv').text('Opportunity ID - ' + opportunityID);
 				$('#opportunityIDDiv').css({ 'color': 'green', 'font-size': '125%' });
 				$.ajax({
-						url: "/inoutcpqsolutions/api/opportunity/read?id=" + opportunityID,
+						url: "/inoutcpqsolutions/api/opportunity/read?pkey=" + opportunityID,
 						dataType: 'json',
 						success: function(result){							
 							$('#oppName').val(result.data.result.name);
@@ -28,7 +28,7 @@ function checkForQueryParameter() {
 							if (result.data.result.isClosed) 
 								$('#oppIsClosed').prop('checked', true);
 								/*document.getElementById('oppIsClosed').setAttribute('checked','checked');*/
-							if (result.data.result.isDeleted) 
+							if (result.data.result.deletedFlag) 
 								$('#oppIsDeleted').prop('checked', true);
 								/*document.getElementById('oppIsDeleted').setAttribute('checked','checked');*/
 							$('#oppAmount').val(result.data.result.amount);
@@ -111,13 +111,13 @@ function saveOpportunity() {
 
 	if ($('#opportunityID').text()) {
 		url = "/inoutcpqsolutions/api/opportunity/upsert";
-		opportunityVo.id = $('#opportunityID').text();
+		opportunityVo.pkey = $('#opportunityID').text();
 	}
 
 	opportunityVo.name = $('#oppName').val();
 	opportunityVo.description = $('#oppDescription').val();
 	opportunityVo.isClosed = $('#oppIsClosed').attr('checked')?true:false;
-	opportunityVo.isDeleted = $('#oppIsDeleted').attr('checked')?true:false;
+	opportunityVo.deletedFlag = $('#oppIsDeleted').attr('checked')?true:false;
 	opportunityVo.isWon = $('#oppIsWon').attr('checked')?true:false;
 	opportunityVo.amount = $('#oppAmount').val();
 	opportunityVo.closedDate = $('#oppClosedDate').val();

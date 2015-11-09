@@ -27,19 +27,19 @@ function loadAllOpportunities() {
 	        var opportunityList = result.data.result;
 	        for (var i=0;i<opportunityList.length;i++) {
 	        	var opportunity = opportunityList[i];
-				var editLink = '<a href=\"/inoutcpqsolutions/jsp/editOpportunity.jsp?opportunityID=' + opportunity.id +'\">Edit</a>';
-	        	//console.log(opportunity.id);
-	        	var deleteLink = '<a id=\"'+ opportunity.id +'\" href=\"javascript:deleteOpportunity(\'' + opportunity.id +'\')\">Delete</a>';
+				var editLink = '<a href=\"/inoutcpqsolutions/jsp/editOpportunity.jsp?opportunityID=' + opportunity.pkey +'\">Edit</a>';
+	        	//console.log(opportunity.pkey);
+	        	var deleteLink = '<a id=\"'+ opportunity.pkey +'\" href=\"javascript:deleteOpportunity(\'' + opportunity.pkey +'\')\">Delete</a>';
 	        	dataTable.fnAddData([
 					editLink + '|' + deleteLink,
-		        	opportunity.id,
+		        	opportunity.pkey,
 		        	opportunity.name,
 		        	opportunity.amount,
 		        	changedTimeFromJs(opportunity.closedDate),
 		        	opportunity.isoCode,
 		        	opportunity.description,
 		        	opportunity.isClosed,
-		        	opportunity.isDeleted,
+		        	opportunity.deletedFlag,
 		        	opportunity.isWon
 	        	]);
 	        }	        

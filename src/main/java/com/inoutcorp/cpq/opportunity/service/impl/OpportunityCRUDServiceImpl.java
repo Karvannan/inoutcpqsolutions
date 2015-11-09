@@ -1,17 +1,16 @@
 package com.inoutcorp.cpq.opportunity.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.inoutcorp.cpq.opportunity.api.IDao;
+import com.inoutcorp.cpq.opportunity.entity.Opportunity;
+import com.inoutcorp.cpq.opportunity.entity.base.IEntity;
 import com.inoutcorp.cpq.opportunity.service.OpportunityCRUDService;
-import com.inoutcorp.cpq.opportunity.utils.InOutCPQConstants;
-import com.inoutcorp.cpq.opportunity.utils.InOutErrorCodes;
 import com.inoutcorp.cpq.opportunity.utils.InOutException;
 import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 
@@ -24,12 +23,54 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	private static final Logger LOGGER = Logger
 			.getLogger(OpportunityCRUDServiceImpl.class);
 
-	/** The Constant opportunityMap. */
-	private static final Map<String, OpportunityVo> opportunityMap = new ConcurrentHashMap<String, OpportunityVo>();
+	@Autowired
+	private IDao<IEntity, Long> dao;
 
-	/** The opportunity id. */
-	private static AtomicLong opportunityId = new AtomicLong(
-			InOutCPQConstants.OPPORTUNITY_SEQUENCE_NUMBER);
+	public IDao<IEntity, Long> getDao() {
+		return dao;
+	}
+
+	public void setDao(IDao<IEntity, Long> dao) {
+		this.dao = dao;
+	}
+
+	private Opportunity getOpportunity(OpportunityVo opportunityVo) {
+		Opportunity opportunity = new Opportunity();
+		opportunity.setAmount(opportunityVo.getAmount());
+		opportunity.setChangedBy(opportunityVo.getChangedBy());
+		opportunity.setChangedTime(opportunityVo.getChangedTime());
+		opportunity.setClosedDate(opportunityVo.getClosedDate());
+		opportunity.setCreatedBy(opportunityVo.getCreatedBy());
+		opportunity.setCreatedTime(opportunityVo.getCreatedTime());
+		opportunity.setDeletedFlag(opportunityVo.getDeletedFlag());
+		opportunity.setDescription(opportunityVo.getDescription());
+		opportunity.setIsClosed(opportunityVo.getIsClosed());
+		opportunity.setIsoCode(opportunityVo.getIsoCode());
+		opportunity.setIsWon(opportunityVo.getIsWon());
+		opportunity.setName(opportunityVo.getName());
+		opportunity.setPkey(opportunityVo.getPkey());
+		opportunity.setVersion(opportunityVo.getVersion());
+		return opportunity;
+	}
+
+	private OpportunityVo getOpportunityVo(Opportunity opportunity) {
+		OpportunityVo opportunityVo = new OpportunityVo();
+		opportunityVo.setAmount(opportunity.getAmount());
+		opportunityVo.setChangedBy(opportunity.getChangedBy());
+		opportunityVo.setChangedTime(opportunity.getChangedTime());
+		opportunityVo.setClosedDate(opportunity.getClosedDate());
+		opportunityVo.setCreatedBy(opportunity.getCreatedBy());
+		opportunityVo.setCreatedTime(opportunity.getCreatedTime());
+		opportunityVo.setDeletedFlag(opportunity.getDeletedFlag());
+		opportunityVo.setDescription(opportunity.getDescription());
+		opportunityVo.setIsClosed(opportunity.getIsClosed());
+		opportunityVo.setIsoCode(opportunity.getIsoCode());
+		opportunityVo.setIsWon(opportunity.getIsWon());
+		opportunityVo.setName(opportunity.getName());
+		opportunityVo.setPkey(opportunity.getPkey());
+		opportunityVo.setVersion(opportunity.getVersion());
+		return opportunityVo;
+	}
 
 	/**
 	 * Upsert.
@@ -38,10 +79,11 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	 *            the opportunity vos
 	 * @return the opportunity vo
 	 */
-	public List<String> upsert(List<OpportunityVo> opportunityVos) {
-		List<String> ids = new ArrayList<String>();
+	@Transactional
+	public List<Long> upsert(List<OpportunityVo> opportunityVos) {
+		List<Long> ids = new ArrayList<Long>();
 		for (OpportunityVo opportunityVo : opportunityVos) {
-			ids.add(upsert(opportunityVo).getId());
+			ids.add(upsert(opportunityVo).getPkey());
 		}
 		return ids;
 	}
@@ -53,38 +95,12 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	 *            the opportunity vo
 	 * @return the response
 	 */
+	@Transactional
 	public OpportunityVo upsert(OpportunityVo opportunityVo) {
-		OpportunityVo updatedOpportunityVo = null;
-
-		if (opportunityVo != null && opportunityVo.getId() != null) {
-			/*
-			 * If opportunity ID is provided, then its update request
-			 */
-
-			opportunityMap.put(opportunityVo.getId(), opportunityVo);
-
-			updatedOpportunityVo = opportunityMap.get(opportunityVo.getId());
-
-		} else {
-
-			/*
-			 * If Opportunity ID is not provided, then its create request
-			 */
-
-			/*
-			 * Generate opportunity sequence number
-			 */
-
-			opportunityVo.setId(BigDecimal.valueOf(
-					opportunityId.incrementAndGet()).toPlainString());
-
-			opportunityMap.put(opportunityVo.getId(), opportunityVo);
-
-			updatedOpportunityVo = opportunityMap.get(opportunityVo.getId());
-
-		}
-
-		return updatedOpportunityVo;
+		Opportunity opportunity = getOpportunity(opportunityVo);
+		Long oppId = dao.saveOrUpdate(opportunity);
+		opportunity.setPkey(oppId);
+		return getOpportunityVo(opportunity);
 	}
 
 	/**
@@ -96,20 +112,10 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	 * @throws InOutException
 	 *             the in out exception
 	 */
-	public OpportunityVo read(String id) throws InOutException {
-		OpportunityVo opportunityVo = null;
-		if (id != null && !"".equalsIgnoreCase(id)) {
-			opportunityVo = opportunityMap.get(id);
-			if (opportunityVo == null)
-				throw new InOutException(InOutErrorCodes.NOT_FOUND,
-						"Opportunity Not Found");
-		} else {
-			throw new InOutException(InOutErrorCodes.NOT_FOUND,
-					"Opportunity ID Not Provided");
-		}
-
-		return opportunityVo;
-
+	@Transactional
+	public OpportunityVo read(Long pkey) throws InOutException {
+		Opportunity opportunity = dao.find(Opportunity.class, pkey);
+		return getOpportunityVo(opportunity);
 	}
 
 	/**
@@ -121,21 +127,9 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	 * @throws InOutException
 	 *             the in out exception
 	 */
-	public boolean delete(String id) throws InOutException {
-
-		if (id != null && !"".equalsIgnoreCase(id)) {
-			OpportunityVo opportunityVo = opportunityMap.get(id);
-			if (opportunityVo == null)
-				throw new InOutException(InOutErrorCodes.NOT_FOUND,
-						"Opportunity Not Found");
-			else
-				opportunityMap.remove(id);
-
-		} else {
-			throw new InOutException(InOutErrorCodes.NOT_FOUND,
-					"Opportunity ID Not Provided");
-		}
-
+	@Transactional
+	public boolean delete(Long pkey) throws InOutException {
+		dao.delete(dao.find(Opportunity.class, pkey));
 		return true;
 	}
 
@@ -152,15 +146,13 @@ public class OpportunityCRUDServiceImpl implements OpportunityCRUDService {
 	 *            the asc
 	 * @return the opportunityVos
 	 */
+	@Transactional
 	public List<OpportunityVo> readAll(Long pageNo, Long pageSize,
 			String sortBy, Boolean asc) {
-
-		List<OpportunityVo> opportunityVos = null;
-		try {
-			opportunityVos = new ArrayList<OpportunityVo>(
-					opportunityMap.values());
-		} catch (Exception e) {
-			LOGGER.error("Error ", e);
+		List<Opportunity> opportunities = dao.findAll(Opportunity.class, null);
+		List<OpportunityVo> opportunityVos = new ArrayList<OpportunityVo>();
+		for (Opportunity opportunity : opportunities) {
+			opportunityVos.add(getOpportunityVo(opportunity));
 		}
 		return opportunityVos;
 	}

@@ -5,7 +5,6 @@ import java.util.List;
 import com.inoutcorp.cpq.opportunity.utils.InOutException;
 import com.inoutcorp.cpq.opportunity.vo.OpportunityVo;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface OpportunityCRUDService.
  */
@@ -27,7 +26,7 @@ public interface OpportunityCRUDService {
 	 *            the opportunity vos
 	 * @return the opportunity vo
 	 */
-	List<String> upsert(List<OpportunityVo> opportunityVos);
+	List<Long> upsert(List<OpportunityVo> opportunityVos);
 
 	/**
 	 * Read.
@@ -38,7 +37,7 @@ public interface OpportunityCRUDService {
 	 * @throws InOutException
 	 *             the in out exception
 	 */
-	OpportunityVo read(String id) throws InOutException;
+	OpportunityVo read(Long id) throws InOutException;
 
 	/**
 	 * Delete.
@@ -49,7 +48,7 @@ public interface OpportunityCRUDService {
 	 * @throws InOutException
 	 *             the in out exception
 	 */
-	boolean delete(String id) throws InOutException;
+	boolean delete(Long id) throws InOutException;
 
 	/**
 	 * Read all.
