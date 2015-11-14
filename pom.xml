@@ -14,17 +14,24 @@
 		<eclipsePluginVersion>2.8</eclipsePluginVersion>
 		<jdkName>JavaSE-1.7</jdkName>
 		<jdk.version>1.7</jdk.version>
-		<spring.version>3.2.1.RELEASE</spring.version>
+
+		<slf4j-log4j12-version>1.5.6</slf4j-log4j12-version>
 		<org.hibernate.version>3.5.6-Final</org.hibernate.version>
 		<mysql-connector-version>5.1.32</mysql-connector-version>
-		<org.springframework-version>3.2.1.RELEASE</org.springframework-version>
+		<spring.version>3.2.1.RELEASE</spring.version>
 		<hibernate.c3p0-version>3.5.6-Final</hibernate.c3p0-version>
+		<mysql-connector-version>5.1.32</mysql-connector-version>
+		<log4j-version>1.2.9</log4j-version>
+		<hibernate-validator-version>4.1.0.Final</hibernate-validator-version>
+		<jpa-api-version>2.0-cr-1</jpa-api-version>
+		<hibernate-commons-annotations-version>3.2.0.Final</hibernate-commons-annotations-version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.5.6</version>
+			<version>${slf4j-log4j12-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
@@ -49,34 +56,34 @@
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
-			<version>1.2.9</version>
+			<version>${log4j-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.32</version>
+			<version>${mysql-connector-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -86,12 +93,12 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework-version}</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -107,7 +114,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-commons-annotations</artifactId>
-			<version>3.2.0.Final</version>
+			<version>${hibernate-commons-annotations-version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>hibernate</artifactId>
@@ -118,7 +125,7 @@
 		<dependency>
 			<groupId>org.hibernate.java-persistence</groupId>
 			<artifactId>jpa-api</artifactId>
-			<version>2.0-cr-1</version>
+			<version>${jpa-api-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -128,7 +135,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>4.1.0.Final</version>
+			<version>${hibernate-validator-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>

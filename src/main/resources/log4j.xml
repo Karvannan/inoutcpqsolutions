@@ -6,7 +6,7 @@
 	<appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{dd MMM yyyy HH:mm:ss} %5p [%c{1}]  %m%n" />
+				value="%d{dd MMM yyyy HH:mm:ss} %5p [%c]  %m%n" />
 		</layout>
 	</appender>
 
@@ -15,12 +15,12 @@
 		<param name="file" value="/logs/inoutcpqsolutions.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
-				value="%d{dd MMM yyyy HH:mm:ss} %5p [%c{1}] %m%n" />
+				value="%d{dd MMM yyyy HH:mm:ss} %5p [%c] %m%n" />
 		</layout>
 	</appender>
 
 	<root>
-		<level value="DEBUG" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 		<appender-ref ref="consoleAppender" />
 	</root>

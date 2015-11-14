@@ -10,8 +10,7 @@
 		<script type="text/javascript" src="../js/editOpportunity.js"></script>		
 		
 		<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
-
+		<link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css">
 		<link href="../css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" type="text/css" />    			
   	
 	</head>
