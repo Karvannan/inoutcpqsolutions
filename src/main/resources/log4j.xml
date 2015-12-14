@@ -12,7 +12,7 @@
 
 	<appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<param name="file" value="/logs/inoutcpqsolutions.log" />
+		<param name="file" value="../logs/inoutcpqsolutions.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern"
 				value="%d{dd MMM yyyy HH:mm:ss} %5p [%c] %m%n" />

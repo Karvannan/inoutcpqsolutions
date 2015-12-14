@@ -217,4 +217,45 @@ public class OpportunityAPI {
 
 	}
 
+	@Path("{opp1}")
+	@GET
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public Response defaultGET(@QueryParam("opp") String opp,
+			@PathParam("opp1") String opp1) {
+		// request example
+		// http://localhost:8080/inoutcpqsolutions/api/opportunity/100?opp=101
+		InOutCorpResponse response = new InOutCorpResponse();
+		try {
+			LOGGER.info("opp " + opp);
+			LOGGER.info("opp1 " + opp1);
+			response.putMessage(InOutCPQConstants.RESULT, "success");
+			return Response.ok().entity(response).build();
+		} catch (Exception e) {
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
+		}
+	}
+
+	@POST
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	public Response defaultPOST(String stringRequest) {
+		InOutCorpResponse response = new InOutCorpResponse();
+
+		try {
+			LOGGER.info("stringRequest " + stringRequest);
+			response.putMessage(InOutCPQConstants.RESULT, stringRequest);
+			return Response.ok().entity(response).build();
+		} catch (Exception e) {
+			LOGGER.error("Error ", e);
+			response.setErrors(e);
+			return Response.status(Status.INTERNAL_SERVER_ERROR)
+					.entity(response).build();
+		}
+
+	}
+
 }
